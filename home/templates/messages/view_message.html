@@ -1,0 +1,119 @@
+{% extends 'home/base.html' %}
+
+{% block styles %}
+#user-container{
+height: 500px;
+overflow-y: auto;
+}
+{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center style=" height: 500px;"">
+  <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 mt-2">
+    <div class="p-3">
+      
+      <div data-mdb-perfect-scrollbar="true" style="position: relative;" id="user-container" class="shadow">
+        <h3 class="text-center mb-0 py-2" style="font-family: cursive; background-color: #002233; color: white;">Messages</h3>
+        <hr class="mt-0">
+        <ul class="list-unstyled mb-0 rounded mt-0 " >
+          <h5 style="text-align: center; font-family: Roboto;" class="mt-2">Mssg on my property</h5>
+          <hr>
+          {% for room,count in owner_room_detail%}
+          <li class="p-2 border-bottom">
+            <a class="d-flex justify-content-between" href="/chat/{{room.room_id}}/?user={{user}}" style="text-decoration: none;">
+              <div class="d-flex flex-row">
+                <div>
+                  
+                  <!-- <i class="fas fa-user-circle d-flex align-self-center me-3" style="width: 60px; height: 25px;"></i> -->
+                  <img src="https://static.vecteezy.com/system/resources/thumbnails/002/387/693/small/user-profile-icon-free-vector.jpg" alt="avatar"
+                    class="d-flex align-self-center me-3" width="65">
+                </div>
+                <div class="pt-1">
+                  <span class="fw-bold mb-0 " style="font-family: Roboto; color: #002233; text-decoration: none;">{{room.property.propertytitle}}</span>
+                  {% if user != room.user2 %}
+                  <p class="small text-muted" style="font-family: Baloo 2;">sent by: me </p>
+                  {% else %}
+                  <p class="small text-muted text-small" style="font-family: Baloo 2" >sent by: {{room.user1}}</p>
+                  {% endif %}
+                </div>
+              </div>
+              {% if count > 0 %}
+              <div class="pt-1" id="{{room.room_id}}">
+                <span class="badge bg-danger rounded-pill float-end ">{{count}} unread msg</span>
+              </div>
+              {% endif %}
+            </a>
+          </li>
+          {% endfor%}
+          <h5 style="text-align: center; font-family: Roboto;" class="mt-2">My messages</h5>
+          <hr>
+          {% for room,count in tenant_room_detail%}
+          <li class="p-2 border-bottom">
+            
+            <a class="d-flex justify-content-between" href="/chat/{{room.room_id}}/?user={{user}}" style="text-decoration: none;">
+              <div class="d-flex flex-row">
+                <div>
+                  <img src="https://static.vecteezy.com/system/resources/thumbnails/002/387/693/small/user-profile-icon-free-vector.jpg" alt="avatar"
+                    class="d-flex align-self-center me-3" width="65">
+                </div>
+                <div class="pt-1">
+                  <p class="fw-bold mb-0" style="font-family: Roboto; color: #002233;">{{room.property.propertytitle}}</p>
+                  {% if user != room.user2 %}
+                  <p class="small text-muted" style="font-family: Baloo 2;">sent by: me </p>
+                  {% else %}
+                  <p class="small text-muted" style="font-family: Baloo 2;">sent by: {{room.user1}}</p>
+                  {% endif %}
+                </div>
+              </div>
+              {% if count > 0 %}
+              <div class="pt-1" id="{{room.room_id}}">
+                <span class="badge bg-danger rounded-pill float-end ">{{count}} unread msg</span>
+              </div>
+              {% endif %}
+            </a>
+          </li>
+          {% endfor%}
+
+        </ul>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var url = 'ws://127.0.0.1:8000/view_messages'
+    let notif_socket = new WebSocket(url)
+
+    notif_socket.onopen = function (e) {
+      console.log("Connected")
+    }
+
+    notif_socket.onmessage = function (e) {
+      var data = JSON.parse(e.data)
+      updateUI(data.payload.room_id, data.payload.unread_count)
+    }
+
+    notif_socket.onclose = function (e) {
+      console.log(e)
+    }
+
+    function updateUI(room_id, count) {
+      var room_unread = document.getElementById(room_id);
+      console.log(document.getElementById(room_id))
+      if (room_unread) {
+        room_unread.innerHTML = `<span class="badge bg-danger rounded-pill float-end ">${count} unread msg</span>`
+      }
+    }
+
+  })
+</script>
+{% endblock %}

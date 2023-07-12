@@ -1,0 +1,68 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block styles%}
+
+
+{% endblock%}
+{% block content %}
+<div class="container-fluid mt-0" style="background: bisque;">
+    <div class="row mt-0" style="background:linear-gradient(to bottom,#002233 50%, #ffffff 50%);  ">
+        <h1 class = "mt-5" style="color: white; text-align: center; font-family: cursive;"><i class="fas fa-shopping-cart"></i> Wishlist</h1>
+        <div class="col-10 bg-white shadow border-3 mb-2 rounded mx-auto zindex-modal tab-content"
+            style="margin-top: 40px;">
+            {% for prop,image in property %}
+            <div class="card mt-3 mb-3 col-12">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div id="property_image" class="carousel slide">
+                            <div class="carousel-inner">
+
+                                {% for i in image %}
+                                <div class="carousel-item {% if forloop.counter == 1%}active {% endif%}">
+                                    <img src="{{i.image.url}}" class="d-block w-100" alt="...">
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#property_image"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#property_image"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">{{prop.propertytitle}}</h5>
+                            <h5 class="card-title">Rs.{{prop.rent}}/month</h5>
+                            <p class="card-text">{{prop.description}}</p>
+                            <p class="card-text">{{prop.address}}</p>
+                            <p class="card-text">{{prop.prefer_renter}}</p>
+                            <p class="card-text">{{prop.category}}</p>
+                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <a href="/remove_from_wishlist/{{prop.property_id}}" class="btn btn-danger">Remove from wishlist</a>
+                            <a href="/create_chat_room/{{prop.property_id}}" class="btn btn-warning" style="font-family: Roboto; color: #ffffff;"><i class="fas fa-comment"></i> Chat</a>
+                            {% if prop.phone_no_visibility %}
+                              <a href="tel:{{prop.profile.mobile}}" class="btn btn-success" style="font-family: Roboto;"><i class="fas fa-phone"></i> Call</a>
+                              {% endif %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock%}
+
+{% block scripts %}
+
+{% endblock %}

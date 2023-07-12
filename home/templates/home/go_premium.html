@@ -1,0 +1,33 @@
+{% extends 'home/base.html' %}
+{% block styles %}
+.style_text p{
+    font-family: cursive;
+
+}
+{% endblock %}
+{% block content %}
+<div class="container my-5 py-5">
+    <div class="col-lg-6 col-sm-12 col-md-12 mx-auto shadow px-2 py-2 mb-2 style_text">
+        <h3 class="text-center py-2" style="font-family: cursive; background-color: #002233; color: white;">
+            Thank You, We will contact you soon to discuss the details and next steps.
+        </h3>
+        <p class="text-center py-3" style="font-family: Roboto; color: #002233;">
+        <p> <strong>Dear {{request.user.username}},</strong> </p>
+        <p>Thank you for choosing our premium plan. We truly appreciate your trust and confidence in our services. </p>
+        <p> Our team is excited to have you on board and we assure you that we will go above and beyond to provide you
+            with exceptional service and value.
+        </p>
+        <p> If you have any questions or need assistance, please don't hesitate to reach out to us. We are here to help
+            and ensure your satisfaction. You can reach us at any time by calling our company number or emailing us.
+        </p>
+        <p> Once again, thank you for choosing us. We are looking forward to serving you and exceeding your
+            expectations.
+        </p>
+        <p> Best regards,
+        </p>
+        <p><strong>NextShelters</strong></p>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

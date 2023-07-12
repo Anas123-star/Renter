@@ -1,0 +1,26 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block styles %}
+
+
+{% endblock%}
+{% block content %}
+<div style="background-color: #002233; color: white;" class="py-2">
+<h2 style="font-family: cursive; " class="text-center"> Photos</h2>
+
+</div>
+<div class="container text-center d-flex flex-column justify-content-center align-item-center">
+    </a>
+    {% for i in images %}
+    <div class="card mb-3 col-lg-8 mx-auto">
+        <img src="{{ i.image.url }}" class="card-img-top image-fluid" alt="...">
+    </div>
+    {% endfor %}
+
+
+
+</div>
+
+
+
+{% endblock %}

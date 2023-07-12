@@ -1,0 +1,183 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block styles %}
+.ui-autocomplete {
+  max-height: 200px;
+  max-width: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.ui-autocomplete li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.ui-autocomplete li:hover {
+  background-color: #e4e4e4;
+}
+
+{% endblock%}
+
+{% block content %}
+<h1 class="text-center mt-5"> Edit Property </h1>
+<div class="container bg-body-secondary mt-5 col-lg-8 mb-5">
+    {% if message %}
+    <br>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+  <form method="POST" enctype="multipart/form-data" id="edit-property-form" class="row g-3">
+    {% csrf_token %}
+    <div class="form-group col-md-6">
+      <label for="property_title">Property Title</label>
+      <input type="text" name="property_title" id="property_title" class="form-control" value="{{ property.propertytitle }}">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="rent"> Rent </label>
+      <input type="number" name="rent" id="rent" class="form-control" value="{{ property.rent }}">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="prefer_renter">Prefer Renter</label>
+      <select class="form-control" id="prefer_renter" name="prefer_renter">
+        {% for choice_value, choice_label in renter_choices %}
+        {% if choice_value == property.prefer_renter %}
+        <option value="{{ choice_value }}" selected>{{ choice_label }}</option>
+        {% else %}
+        <option value="{{ choice_value }}">{{ choice_label }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="type_of_home">Type of Homes</label>
+      <select class="form-control" id="type_of_home" name="type_of_home">
+        {% for category in categorical_choices %}
+        {% if category.id == property.category.id %}
+        <option value="{{ category.id }}" selected>{{ category.cat_name }}</option>
+        {% else %}
+        <option value="{{ category.id }}">{{ category.cat_name }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="furnishing">Furnishing</label>
+      <select class="form-control" id="furnishing" name="furnishing">
+        {% for choice_value, choice_label in furnishing_choices %}
+        {% if choice_value == property.furnishing %}
+        <option value="{{ choice_value }}" selected>{{ choice_label }}</option>
+        {% else %}
+        <option value="{{ choice_value }}">{{ choice_label }}</option>
+        {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="state-search">State:</label>
+      <input type="text" id="state-search" name="state" placeholder="Search State" autocomplete="off" class="form-control" value="{{ property.state }}">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="district-search">District:</label>
+      <input type="text" id="district-search" name="district" placeholder="Search District" autocomplete="off" class="form-control" value="{{ property.district }}">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="area">Area</label>
+      <input type="text" name="area" id="area" class="form-control" value="{{ property.locality }}">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="pincode">Pincode</label>
+      <input type="text" name="pincode" id="pincode" class="form-control" value="{{ property.pincode }}">
+    </div>
+    <div class="form-group col-md-12">
+      <label for="address">Address</label>
+      <textarea class="form-control" id="address" name="address" rows="2">{{ property.address }}</textarea>
+    </div>
+    <div class="form-group col-md-12">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3">{{ property.description }}</textarea>
+    </div>
+    <div class="form-group col-md-12">
+      <label for="amenities">Amenities</label>
+      <div class="row">
+        {% for amenity in amenities %}
+        <div class="col-md-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="amenities" id="amenity-{{ amenity.id }}" value="{{ amenity.id }}" {% if amenity.name in prop_amenities_list %}checked{% endif %}>
+            <label class="form-check-label" for="amenity-{{ amenity.id }}">
+              {{ amenity.name }}
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="form-group col-md-12">
+      <label for="phone_no_visibility">Phone Number Visibility</label>
+      <div class="form-check">
+        <input class="form-check-input" required  type="radio" name="phone_no_visibility" id="phone_no_visibility1" value=True {% if property.phone_no_visibility == True %}checked{% endif %}>
+        <label class="form-check-label" for="phone_no_visibility1">
+          Show Phone Number
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input"  required type="radio" name="phone_no_visibility" id="phone_no_visibility2" value=False {% if property.phone_no_visibility == False %}checked{% endif %}>
+        <label class="form-check-label" for="phone_no_visibility2">
+          Hide Phone Number
+        </label>
+      </div>
+    </div>
+    <div class="col-6 text-end mb-2" >
+      <button type="submit" class="btn btn-warning">Save Changes</button>
+    </div>
+
+
+  </form>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_map_api_key }}&libraries=places"></script>
+<script>
+    var input = document.getElementById('address');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    function checkEnter(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+    }
+</script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<!-- Include jQuery UI Autocomplete -->
+<!-- <script src="path/to/jquery.ui.autocomplete.min.js"></script> -->
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var districts = {{ districts|safe }};
+    var states = {{ states|safe }};
+    console.log(states.state)
+    var stateSearchInput = document.getElementById('state-search');
+    var districtSearchInput = document.getElementById('district-search');
+
+    $(districtSearchInput).autocomplete({
+      source: districts,
+      minLength: 3, // Minimum number of characters to trigger autocomplete suggestions
+      delay: 300 // Delay in milliseconds before displaying autocomplete suggestions
+    });
+
+
+    $(stateSearchInput).autocomplete({
+      source: states,
+      minLength: 3, // Minimum number of characters to trigger autocomplete suggestions
+      delay: 300 // Delay in milliseconds before displaying autocomplete suggestions
+    });
+    
+  });
+</script>
+{% endblock%}

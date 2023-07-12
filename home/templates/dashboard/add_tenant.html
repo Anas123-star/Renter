@@ -1,0 +1,112 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+<h1 class="text-center mt-5"> Add Details of Tenant </h1>
+<div class="container bg-body-secondary mt-5 col-lg-8 mb-5">
+  <form method="post" enctype="multipart/form-data" id="tenant-form" class="row g-3">
+    {% csrf_token %}
+    <div class="form-group col-md-6">
+      <label for="name">Enter full Name of tenant</label>
+      <input type="text" name="name" id="name" class="form-control" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="rent">Rent</label>
+      <input type="number" name="rent" id="rent" class="form-control" value="{{property_obj.rent}}" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="advance">Advance</label>
+      <input type="number" name="advance" id="advance" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="phone">Phone number</label>
+      <input type= "tel" name="phone" id="phone" class="form-control"  required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="email">Email:</label>
+      <input type= "email" name="email" id="email" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="start_date">Checkin date:</label>
+      <input type= "date" name="start_date" id="start_date" class="form-control" required>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="address">Address</label>
+      <textarea name="address" id="address" cols="6" rows="3" class="form-control"></textarea>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="adhaar_no">Adhaar No</label>
+      <input type="number" name="adhaar_no" id="adhaar_no" class="form-control" maxlength= 12>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="doc">Upload Adhaar or Pan Card</label>
+      <!-- <input type="file" class="form-control-file" id="doc" name="doc" accept="image/*" multiple> -->
+      <input type="file" name="doc" id="doc" accept="application/pdf" class="form-control-file" onchange="validateFile(this)" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="photo">Photo</label>
+      <input type="file" class="form-control-file" id="photo" name="photo" accept="image/* " onchange="validatePhoto(this)" required>
+      <!-- <input type="file" name = "doc" id="doc" class="form-control-file"> -->
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function validateFile(fileInput) {
+    const maxFileSize = 15 * 1024 * 1024; // 15 MB
+
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const fileSize = file.size;
+
+      // Check file extension
+      const allowedExtensions = /(\.pdf)$/i;
+      if (!allowedExtensions.test(file.name)) {
+        alert("Only PDF files are allowed. Please select a PDF file.");
+        fileInput.value = ''; // Clear the file input
+        return;
+      }
+
+      // Check file size
+      if (fileSize > maxFileSize) {
+        alert("File size exceeds the limit of 5MB. Please select a smaller file.");
+        fileInput.value = ''; // Clear the file input
+      }
+    }
+  }
+
+
+
+</script>
+
+<script>
+  function validatePhoto(fileInput) {
+    const maxFileSize = 5 * 1024 * 1024; // 5 MB
+
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const fileSize = file.size;
+
+      // Check file extension
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      if (!allowedExtensions.test(file.name)) {
+        alert("Only JPG, JPEG, PNG, and GIF image files are allowed. Please select a valid image file.");
+        fileInput.value = ''; // Clear the file input
+        return;
+      }
+
+      // Check file size
+      if (fileSize > maxFileSize) {
+        alert("File size exceeds the limit of 5MB. Please select a smaller image file.");
+        fileInput.value = ''; // Clear the file input
+      }
+    }
+  }
+</script>
+
+
+{% endblock %}

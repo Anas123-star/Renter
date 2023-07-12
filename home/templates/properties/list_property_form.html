@@ -1,0 +1,144 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block styles %}
+.ui-autocomplete {
+  max-height: 200px;
+  max-width: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.ui-autocomplete li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.ui-autocomplete li:hover {
+  background-color: #e4e4e4;
+}
+
+{% endblock%}
+{% block content %}
+<h1 class="text-center mt-5" style="font-family: cursive;"> List your property </h1>
+<div class="container bg-body-secondary mt-5 col-lg-8 mb-5 " style="font-family: Roboto;">
+  <form method="POST" enctype="multipart/form-data" id="property-form" class="row g-3">
+    {% csrf_token %}
+    <div class="form-group col-md-6">
+      <label for="property_title">Property Title</label>
+      <input type="text" name="property_title" id="property_title" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="rent"> Rent </label>
+      <input type="number" name="rent" id="rent" class="form-control">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="prefer_renter">Prefer Renter</label>
+      <select class="form-control" id="prefer_renter" name = "prefer_renter">
+        {% for choice_value, choice_label in renter_choices %}
+        <option value="{{ choice_value }}" selected>{{ choice_label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="type_of_home">Type of Homes</label>
+      <select class="form-control" id="type_of_home" name="type_of_home">
+        {% for category in categorical_choices %}
+        <option value="{{ category.id }}">{{ category.cat_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="furnishing">Furnishing</label>
+      <select class="form-control" id="furnishing" name = "furnishing">
+        {% for choice_value, choice_label in furnishing_choices %}
+        <option value="{{ choice_value }}" selected>{{ choice_label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-3">
+      <label for="state-search">State:</label>
+      <input type="text" id="state-search"  name="state" placeholder="Search State" autocomplete="off" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="district-search">District:</label>
+      <input type="text" id="district-search" name="district" placeholder="Search District" autocomplete="off" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for= "area">Village/Town/City</label>
+      <input type="text" id="area" name="area"  class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="pincode">Pin Code</label>
+      <input type="number" name="pincode" id="pincode" class="form-control" required>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="address">Address</label>
+      <input type="text" name="address" id="address" autocomplete="off" cols="6" onkeydown="return checkEnter(event)" rows="3" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="description">Description</label>
+      <textarea name="description" id="description" cols="6" rows="3" class="form-control"></textarea>
+    </div>
+    <div class="form-group col-md-12">
+      <h4>Amenities</h4>
+      {% for amenity in amenities %}
+        <input type="checkbox" name="amenities" value="{{amenity.id }}">
+        <label>{{ amenity.name }}</label>
+    {% endfor %}
+    </div>
+    <div class="form-group col-md-12">
+      <h4>Do you want to show your mobile no for receiving calls from tenant</h4>
+        <input type="checkbox" name="phone_no_visibility" value="True" checked>
+        <label>receiving Calls</label>
+    </div>
+    <div class="bg-white d-flex justify-content-center">
+    <button type="submit" class="btn btn-view-1 col-6 mx-auto mb-2 mt-2">Submit</button>
+  </div>
+  </form>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_map_api_key }}&libraries=places"></script>
+<script>
+    var input = document.getElementById('address');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    function checkEnter(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+    }
+</script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<!-- Include jQuery UI Autocomplete -->
+<!-- <script src="path/to/jquery.ui.autocomplete.min.js"></script> -->
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var districts = {{ districts|safe }};
+    var states = {{ states|safe }};
+    console.log(states.state)
+    var stateSearchInput = document.getElementById('state-search');
+    var districtSearchInput = document.getElementById('district-search');
+
+    $(districtSearchInput).autocomplete({
+      source: districts,
+      minLength: 3, // Minimum number of characters to trigger autocomplete suggestions
+      delay: 300 // Delay in milliseconds before displaying autocomplete suggestions
+    });
+
+
+    $(stateSearchInput).autocomplete({
+      source: states,
+      minLength: 3, // Minimum number of characters to trigger autocomplete suggestions
+      delay: 300 // Delay in milliseconds before displaying autocomplete suggestions
+    });
+    
+  });
+</script>
+{% endblock%}

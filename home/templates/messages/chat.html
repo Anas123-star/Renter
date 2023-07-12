@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        #chat2 .form-control {
+            border-color: transparent;
+        }
+
+        #chat2 {
+            height: 100vh;
+        }
+        #chat2 .form-control:focus {
+            border-color: transparent;
+            box-shadow: inset 0px 0px 0px 1px transparent;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <section style="background-color: #00000000;">
+        <div class="p-0 m-0">
+            <div class="row d-flex justify-content-center p-0 m-0">
+                <div class="col-md-12 col-lg-12 col-xl-12 px-0 py-0">
+                    <div class="card" id="chat2">
+                        <div class="card-header d-flex justify-content-between align-items-center p-3" style="background-color: #002233; color: white; font-family: Baloo 2;">
+                            <h5 class="mb-0">Chat</h5>
+                            <h5 class="mb-0"> Owner: {{owner}}</h5>
+                            <h5 class="mb-0"> Tenant: {{customer}}</h5>
+                        </div>
+                        <div class="card-body chat-container" style="position: relative; height: 400px" id="chatUI">
+                            {% for message in messages %}
+
+                            {% if user == message.sender.username %}
+                            <div class="d-flex flex-row justify-content-end">
+                                <i class = "fas fa-user-circle fa-2x" style="background-color: #ffff; color: #002233;"></i>
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7; font-family: Baloo 2;">
+                                        {{message.content}}</p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted" style="font-family: Baloo 2;">{{message.sender}}</p>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="d-flex flex-row justify-content-start">
+                                <i class = "fas fa-user-circle fa-2x" style="background-color: #ffff; color: #002233;"></i>
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3 text-white" style="background-color: #002233; font-family: Baloo 2;">{{message.content}}
+                                    </p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted" style="font-family: Baloo 2;">{{message.sender}}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+                            {% endfor %}
+
+                        </div>
+
+                        <!-- typing area -->
+                        <div class="card-footer text-muted d-flex justify-content-center align-items-center pt-3" style="background-color: #002233; color: white; font-family: Baloo 2;">
+                            <i class = "fas fa-user-circle fa-3x" style="background-color: #002233; color: #eee;"></i>
+                            <input type="text" class="form-control form-control-lg" id="message"
+                                placeholder="Type message">
+                            <div onclick="sendMessage()">
+                                <button id="button-addon2" type="submit" class="btn" style="background-color: #002233; color: white;" ><i
+                                        class="fas fa-paper-plane fa-lg" ></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script>
+        var url = 'ws://127.0.0.1:8000/chat/{{room_code}}'
+        var user = '{{user}}'
+        var websocket = new WebSocket(url)
+        function scrollToBottom() {
+            var chatContainer = document.getElementById("chatUI");
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        websocket.onopen = function (e) {
+            console.log("connected")
+        }
+        websocket.onmessage = function (e) {
+            var data = JSON.parse(e.data)
+            if (data.payload.message) {
+                updateUI(data.payload.message, data.payload.sender)
+                scrollToBottom();
+            }
+            
+        }
+
+        websocket.onclose = function (e) {
+            console.log(e)
+        }
+        function updateUI(message, sender) {
+            var chatContainer = document.getElementById("chat-container");
+            var html_sender = `<div class="d-flex flex-row justify-content-end">
+                <i class = "fas fa-user-circle fa-2x" style="background-color: #ffff; color: #002233;"></i>
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7; font-family: Baloo 2;">${message}</p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted" style = "font-family: Baloo 2">${sender}</p>
+                                </div>
+                            </div>
+`
+
+            var html_receiver = `
+                <div class="d-flex flex-row justify-content-start">
+                    <i class = "fas fa-user-circle fa-2x" style="background-color: #ffff; color: #002233;"></i>
+                                <div>
+                                    <p class="small p-2 ms-3 mb-1 rounded-3 text-white" style="background-color:#002233">${message}</p>
+                                    <p class="small ms-3 mb-3 rounded-3 text-muted">${sender}</p>
+                                </div>
+                            </div>
+                `
+
+
+            if (sender == user) {
+                document.getElementById('chatUI').innerHTML += html_sender
+            }
+            else {
+                document.getElementById('chatUI').innerHTML += html_receiver
+            }
+
+        }
+        function sendMessage() {
+            let recipient_name  = '{{recipient_name}}'
+            var room_id = '{{room_code}}'
+            var message = document.getElementById('message').value
+            websocket.send(JSON.stringify({ 'message': message, 'sender': user, 'room_id': room_id , 'recipient_name': recipient_name }))
+            document.getElementById('message').value = ''
+        }
+    </script>
+
+</body>
+
+</html>

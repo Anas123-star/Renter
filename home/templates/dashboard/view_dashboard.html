@@ -1,0 +1,55 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid mt-0" style="background: bisque;">
+    <div class="row my-2" style="background:linear-gradient(to bottom, #000249 50%, #ffca2d 50%);  ">
+        <h1 class = "mt-5" style="color: aliceblue; text-align: center;">Your Properties </h1>
+        <div class="col-10 bg-white shadow border-3 mb-2 rounded mx-auto zindex-modal tab-content"
+            style="margin-top: 40px;">
+            {% for prop,image in property %}
+            <div class="card mt-3 mb-3 col-12">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div id="{{prop.property_id}}" class="carousel slide">
+                            <div class="carousel-inner">
+
+                                {% for i in image %}
+                                <div class="carousel-item {% if forloop.counter == 1%}active {% endif%}">
+                                    <img src="{{i.image.url}}" class="d-block w-100" alt="...">
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#{{prop.property_id}}"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#{{prop.property_id}}"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h5 class="card-title">{{prop.propertytitle}}</h5>
+                            <h5 class="card-title">Rs.{{prop.rent}}/month</h5>
+                            <p class="card-text">{{prop.description}}</p>
+                            <p class="card-text">{{prop.address}}</p>
+                            <p class="card-text">{{prop.prefer_renter}}</p>
+                            <p class="card-text">{{prop.category}}</p>
+                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <a href="{% url 'show_property_photos' prop.property_id %}" class="btn btn-view-1">Show Photos</a>
+                            <a href="dashboard/tenants/{{prop.property_id}}" class="btn btn-warning">Tenant Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

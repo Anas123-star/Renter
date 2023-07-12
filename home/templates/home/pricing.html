@@ -1,0 +1,73 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container py-3">
+
+        <main>
+          <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+
+            <div class="col mx-auto">
+              <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                  <h4 class="my-0 fw-normal">Premium</h4>
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title pricing-card-title text-muted" style="text-decoration: line-through;">Rs 1250<small class="text-body-secondary fw-light" style="text-decoration: none;">/year</small></h4>
+                  <p>For the first 100 customers, a 20% discount is available</p>
+                  <h2 class="card-title pricing-card-title">Rs 1000 <small>/year</small></h2>
+                  <a href="{% url 'go_premium' %}" class="w-100 btn btn-lg btn-outline">Buy Premium</a>
+                </div>
+              </div>
+            </div>
+          </div>
+      
+          <h2 class="display-6 text-center mb-4">Compare plans</h2>
+      
+          <div class="table-responsive">
+            <table class="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th style="width: 33%;"></th>
+                  <th style="width: 33%;">Free</th>
+                  <th style="width: 33%;">Premium</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="text-start">Multiple Listings</th>
+                  <td>List up to one property at a time</td>
+                  <td>Unlimited property listings</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Visibility</th>
+                  <td>Property will be visible to only 33.33% of users</td>
+                  <td>Properties will be visible to 100% of users</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Priority</th>
+                  <td>Priority in search results given after premium users</td>
+                  <td>First priority in search results</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Social Media Promotion</th>
+                  <td>No social media promotion of your property</td>
+                  <td>Your properties will be promoted on the company's social media accounts</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Tenant Details</th>
+                  <td>No such feature available</td>
+                  <td>You can maintain tenant details</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="text-start">Rent Collection Record</th>
+                  <td>No such feature available</td>
+                  <td>You can maintain rent collection records for all your properties</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+        </main>
+      </div>
+
+      {% endblock %}

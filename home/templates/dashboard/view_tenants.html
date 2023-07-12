@@ -1,0 +1,83 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container text-center my-2">
+<a href="{% url 'add_tenant' property_id %}" class="btn btn-view-1 text-center py-2 my-2 mx-auto">
+    <i class="fa fa-plus"></i> Register New Tenant
+</a>
+<hr>
+</div>
+
+<div class="container text-center d-flex justify-content-center align-item-center flex-wrap">
+
+    {% for i in tenants %}
+    <div class="card mb-3 col-lg-4 mx-auto">
+        <a href="{{i.photo.url}}"><img src="{{ i.photo.url }}" class="card-img-top image-fluid" style="height: 300px;"  alt="..."></a>
+        <div class="card-body">
+            <p style="font-family: Roboto;"><strong>{{i.name}}</strong></p>
+            <p style="font-family: Roboto;">{{i.address}}</p>
+            <p style="font-family: Roboto;">{{i.adhaar_no}}</p>
+            <a href="{% url 'tenant_details' i.uid %}" class="btn btn-view-1 text-center py-2 my-2 mx-auto">
+                <i class="fa fa-details"></i> Tenant Record
+            </a>      
+            <a href="{{i.document.url}}" class="btn btn-view-1 text-center py-2 my-2 mx-auto">
+                <i class="fa fa-details"></i>  Show documents
+            </a>      
+            <form action="{% url 'delete_tenant' i.uid%}" id="deleteTenantForm-{{ i.id }}" method="post" class="mt-2">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirmDelete('{{ i.id }}')">
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="deleteItem()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+function confirmDelete(itemId) {
+    $('#deleteModal').modal('show');
+    // Set the ID of the item to delete in a data attribute
+    $('#deleteModal').data('itemId', itemId);
+    return false;
+}
+
+function deleteItem() {
+    // Get the ID of the item to delete from the data attribute
+    var itemId = $('#deleteModal').data('itemId');
+
+    // Construct the form ID using the item ID
+    var formId = '#deleteTenantForm-' + itemId;
+
+    // Submit the form
+    $(formId).submit();
+
+    // Close the modal
+    $('#deleteModal').modal('hide');
+}
+</script>
+{% endblock %}

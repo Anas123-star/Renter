@@ -1,0 +1,259 @@
+{% extends 'home/base.html' %}
+{% block styles %}
+
+table td,
+table th {
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+}
+
+thead th {
+color: #fff;
+}
+
+.card {
+border-radius: .5rem;
+}
+
+.table-scroll {
+border-radius: .5rem;
+}
+
+.table-scroll table thead th {
+font-size: 1.25rem;
+}
+thead {
+top: 0;
+position: sticky;
+}
+{% endblock %}
+{% load static %}
+{% block content %}
+
+<div class="container fluid">
+  <div class="container d-flex justify-content-center align-items-center mt-3 mb-2 ">
+
+    <div class="card shadow mt-2 mb-2 " style="width: 100vw;">
+
+      <div class="user text-center">
+        <div class="profile">
+          <img src="{{tenant_details.photo.url}}" class="rounded-circle" width="150px">
+        </div>
+
+      </div>
+      <div class="mt-3 text-center">
+        <h4 class="mb-0">{{tenant_details.name}}</h4>
+        <span class="text-muted d-block mb-2">+91-{{tenant_details.phone}} | {{tenant_details.email}}</span>
+        <div class="d-flex justify-content-between align-items-center mt-4 px-4">
+          <div class="stats">
+            <h6 class="mb-0">Checkin-date</h6>
+            <span>{{tenant_details.start_date}}</span>
+          </div>
+
+          <div class="stats">
+            <h6 class="mb-0">Rent per month</h6>
+            <span>{{tenant_details.rent}}</span>
+          </div>
+          <div class="stats">
+            <h6 class="mb-0">Days Left for collection</h6>
+            <span>{{days_left}}</span>
+          </div>
+        </div>
+        <div class="container row">
+          <hr>
+          <div class="col-6">
+            <h6>Total Expected Rent Collected ? </h6>
+            <span class="fs-6" id="rent_collect">{{total_expected_rent_collected}}</span>
+          </div>
+          <div class="col-6">
+            <h6>Advance</h6>
+            <p>{{tenant_details.advance}}</p>
+          </div>
+          <hr>
+          <div class="col-6">
+            <h6>Total Rent Collected</h6>
+            <p>{{total_amount}}</p>
+          </div>
+          <div class="col-6">
+            <h6>Due</h6>
+            <p>{{due}}</p>
+          </div>
+          <hr>
+        </div>
+        <div class="container bg-light">
+          <h4>Monthly Record </h4>
+          <section class="intro mb-1">
+            <div class="bg-light h-100">
+              <div class="mask d-flex align-items-center h-100 mb-2">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-12">
+                      <div class="card">
+                        <div class="card-body p-0">
+                          <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true"
+                            style="position: relative;">
+                            <table class="table table-striped mb-0">
+                              <thead style="background-color: #002d72;">
+                                <tr>
+                                  <th scope="col">Month</th>
+                                  <th scope="col">Amount</th>
+                                  <th scope="col">Received Date</th>
+                                  <th scope="col">Update</th>
+                                  <th scope="col">Status</th>
+                                </tr>
+
+                              </thead>
+                              <tbody id="monthly_record_table_body">
+                                {% for i in tenant_records%}
+                                <tr>
+                                  <td>{{i.month}}</td>
+                                  <td>{{i.amount_rec}}</td>
+                                  <td>{{i.received_date}}</td>
+                                  <td>Updated</td>
+                                  <td> {% if i.status == '1' %}Collected {% endif%}</td>
+                                </tr>
+                                {% endfor%}
+                                {% for i in range_for%}
+                                <tr>
+                                  <form action="" id="form_{{i}}" class="update-form">
+                                  <td id="month_no_{{i}}">{{i}}</td>
+                                  <td><input type="number" name="rent_amount" id="rent_amount_{{i}}"></td>
+                                  <td><input type="date" name="rec_date" id="rec_date_{{i}}"></td>
+                                  <td><button class="btn btn-success" type="submit">Update</button></td>
+                                  <td> Pending</td>
+                                </form>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // console.log({{total_days}})
+
+  //   // Get the necessary elements
+  //   const rentSpan = document.getElementById('rent');
+  //   const yesButton = document.getElementById('yesButton');
+  //   const date = new Date();
+  //   let current_day = date.getDate();
+  //   let month = Math.floor(({{total_days}})/30) + 1;
+  //   let total_rent = month*{{tenant_details.rent}}
+  //   console.log(total_rent)
+  //   console.log(current_day); 
+  //   console.log(Math.floor(({{total_days}})/30) )
+  //   // Add event listener to the button
+  //   yesButton.addEventListener('click', () => {
+  //     // Update the rent value
+  //     const currentRent = parseInt(rentSpan.textContent);
+  //     const updatedRent = currentRent + 100; // Example: Incrementing rent by 100
+  //     rentSpan.textContent = updatedRent;
+  //   });
+  $(document).ready(function() {
+  $('.update-form').on('submit', function(event) {
+  event.preventDefault();
+  var formData = $(this).serialize();
+        console.log(formData);
+  var rentAmount = $('#rent_amount_' + $(this).attr('id').split('_')[1]).val();
+  var recDate = $('#rec_date_' + $(this).attr('id').split('_')[1]).val();
+  let month_no = $(this).attr('id').split('_')[1];
+  sendRentData(rentAmount,recDate, month_no);
+  var url = window.location.href;
+  url += (url.indexOf('?') === -1 ? '?' : '&') + 'cache=' + Date.now();
+
+  // Reload the page with the cache-busting URL
+  window.location.href = url;
+});
+  })
+  const date = new Date();
+  let current_day = date.getDate();
+  let month = Math.floor(({{ total_days }}) /30);
+
+  // function addmonthrow(month) {
+  //   table_body = document.getElementById("monthly_record_table_body")
+  //   total_rows = table_body.rows.length
+  //   for (let i = 0; i < (month - total_rows); i++) {
+  //     console.log(i)
+  //     var newRow = document.createElement("tr");
+
+  //     // Create table cells for the month and data
+  //     var monthCell = document.createElement("td");
+  //     monthCell.textContent =i+1;
+  //     var amountCell = document.createElement("td");
+
+  //     amountCell.textContent = 'AMOUNT';
+  //     var received_dateCell = document.createElement("td");
+  //     received_dateCell.textContent = 'Received Date';
+  //     var updateCell = document.createElement("td");
+  //     updateCell.textContent = 'Update Cell';
+  //     var statusCell = document.createElement("td");
+  //     statusCell.textContent = 'Status';
+  //     // Append the cells to the new row
+  //     newRow.appendChild(monthCell);
+  //     newRow.appendChild(amountCell);
+  //     newRow.appendChild(received_dateCell);
+  //     newRow.appendChild(updateCell);
+  //     newRow.appendChild(statusCell);
+  //     table_body.appendChild(newRow);
+  //   }
+  // }
+  // table_body = document.getElementById("monthly_record_table_body")
+  // console.log(month)
+
+
+  let url = 'ws://127.0.0.1:8000/dashboard/tenant_details/{{tenant_details.uid}}'
+  let ten_socket = new WebSocket(url)
+
+  ten_socket.onopen = function (e) {
+    console.log("connected to ")
+  }
+
+  ten_socket.onmessage = function (e) {
+    console.log(e)
+  }
+
+  ten_socket.onclose = function (e) {
+    console.log(e)
+  }
+
+
+  function sendRentData(rentAmount,receivingDate,month_no) {
+    let tenant_uid = '{{tenant_details.uid}}'
+    let rent_collect = document.getElementById('rent_collect')
+    console.log(rent_collect.innerText)
+    const date = new Date();
+    let current_day = date.getDate();
+    let month = Math.floor(({{ total_days }}) /30);
+    let total_rent = month * {{ tenant_details.rent }}
+    rent_collect.innerText = total_rent
+    console.log(total_rent)
+    ten_socket.send(JSON.stringify({ 'tenant_uid': tenant_uid, 'rent_collect': total_rent, 'rentAmount':rentAmount, 'receivingDate' :receivingDate, 'month_no':month_no }))
+
+}
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

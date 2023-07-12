@@ -1,0 +1,46 @@
+
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+
+{% if not request.user.is_authenticated %}
+
+<div class="container my-5 py-5">
+    
+    <div class="col-lg-6 col-sm-12 col-md-12 mx-auto shadow px-2 py-2 mb-2">
+        <h3 class="text-center py-2" style="font-family: cursive; background-color: #002233; color: white;">Login</h3>
+
+        <form method="post" style="font-family: Baloo;">
+            {% csrf_token %}
+            {% if message %}
+            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <div class="row mb-2">
+                <div class="form-group col-12">
+                    <input type="text" placeholder="Username" class="form-control" name="username" id="" required>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="form-group col-12">
+                    <input type="password" placeholder="password" class="form-control" name="password" id="" required>
+                </div>
+            </div>
+            <p class="mb-0" style="font-family: Baloo;">Don't have account <a href="{% url 'register' %}">Register</a></p>
+            <p class="mt-0" style="font-family: Baloo;">Have you forgotten your password or username <a href="{% url 'forgot_password' %}">Forgot Password/username ?</a></p>
+
+            <button class="btn btn-view-1">Login</button>
+        </form>
+        
+    </div>
+
+</div>
+
+{% else %}
+<p>Already LoggedIn Go to home</p>
+<a href=" {% url 'home' %}" class="btn btn-primary">Home</a>
+{% endif %}
+{% endblock %}

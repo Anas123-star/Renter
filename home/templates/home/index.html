@@ -1,0 +1,246 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block styles%}
+.card:hover{
+  transform: scale(1.1);
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+.card-body{
+  padding: 0.5rem;
+}
+.card-body .description{
+  font-size: 0.78rem;
+  padding-bottom: 8px;
+}
+.card-img-top{
+  height:200px;
+}
+{% endblock%}
+{% block content %}
+<!-- style="background-image: url('{{banners.last.img.url}}');background-position: center center; background-repeat: no-repeat; background-size: cover; height: 50vh; " -->
+<!-- Main content start here -->
+<div class="container-fluid d-flex align-items-center justify-content-center"
+
+  style="background:linear-gradient(70deg, #002233 60%, #0d597e 40%) ;background-position: center center; background-repeat: no-repeat; background-size: cover; height: 50vh;">
+  <div class="container px-5">
+    <form class="w-100 me-3  fs-5 " role="search" style="height: 100px; ">
+      <input type="search" id="search" class="form-control flex-fill fs-5 border border-3 border-info"
+        placeholder="Search here....." aria-label="Search">
+    </form>
+  </div>
+</div>
+
+<div class="container pb-5 pt-2 mb-5 mt-5" style="background-color: #005985ad;">
+  <div class="container d-flex justify-content-between">
+    <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
+  </div>
+
+  <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+          {% for all_prop,prop_image in all_properties %}
+          <div
+            class="card mx-2 mb-2 mr-2 {% if forloop.counter|divisibleby:3 %} d-none d-sm-block {% endif %} {% if forloop.counter|divisibleby:4 %} d-none d-lg-block {% endif %}"
+            style="width: 18rem;">
+            <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{all_prop.property_title}}</h5>
+              <p class="card-text">{{all_prop.description}}</p>
+              <h4 class="card-title">{{all_prop.rent}}</h4>
+              <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="container d-flex bg-body-secondary mb-2 mt-2">
+          {% endif %}
+          {% endfor %}
+
+        </div>
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+
+  <nav>
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+      {% for category in categories %}
+      <button class="nav-link {% if forloop.counter == 1%}active {% endif%}text-small mx-1" id="nav-{{category.id}}-tab"
+        data-bs-toggle="tab" data-bs-target="#nav-{{category.id}}" type="button" role="tab"
+        aria-controls="nav-{{category.id}}" aria-selected="true" style="font-family: cursive;" >{{category.cat_name}} </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+
+  <div class="tab-content" id="nav-tabContent">
+    {% for cat_prop, cat_id, cat in cat_properties %}
+    <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
+      aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
+      <div class="container pb-5 pt-2 mb-5" style="background-color: #2c6a89ad;">
+        <div class="container d-flex justify-content-between">
+          <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">{{cat}}</h2>
+        </div>
+
+        <div id="{{cat_id}} Controls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container d-flex col-lg-10 col-md-10 ">
+                {% for i,j in cat_prop %}
+                <div
+                  class="card mx-2 mb-2 mr-2 {% if forloop.counter|divisibleby:3 %} d-none d-sm-block {% endif %} {% if forloop.counter|divisibleby:4 %} d-none d-lg-block {% endif %}"
+                  style="width: 18rem;">
+                  <img src="{{j.image.url}}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.propertytitle}}</h5>
+                    <h4 class="card-title">{{i.rent}}</h4>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="/property_detailed_view/{{i.property_id}}" class="btn btn-view-1 col-12">view</a>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container d-flex col-lg-10 col-md-10">
+                {% endif %}
+
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+
+</div>
+
+
+
+
+
+<div class="modal" id="searchModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" style="font-family: Roboto;">NextShelters</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="col-md-10">
+            <form method="post" , action="{% url 'search_properties'  %}">
+              {% csrf_token %}
+              <div class="form-group mb-2">
+                <label for="citySelect" style="font-family: Roboto;">City</label>
+                <select class = "form-control" name="city" id="citySelect">
+                  {% for city in cities %}
+                  <option value="{{ city }}" style="font-family: Baloo 2;">{{ city }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="prefer_renter" style="font-family: Roboto;">Prefer Renter</label>
+                <select class="form-control" id="prefer_renter" name = "prefer_renter">
+                  {% for choice_value, choice_label in renter_choices %}
+                  {% if choice_value == 'ANY' %}
+                  <option value="{{ choice_value }}" selected style="font-family: Baloo 2;">{{ choice_label }}</option>
+                  {% else %}
+                  <option value="{{ choice_value }}" style="font-family: Baloo 2;">{{ choice_label }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group mb-2">
+                <label for="type_of_home" style="font-family: Roboto;">Type of Homes</label>
+                <select class="form-control" id="type_of_home" name="type_of_home">
+                  <option value="0" selected>All</option>
+                  {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.cat_name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-view-1 mb-2">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts%}
+<script>
+  let e = document.getElementById("search")
+  let modal = document.getElementById('searchModal');
+  e.addEventListener('click', () => {
+    var modalInstance = new bootstrap.Modal(modal);
+    modalInstance.show();
+  })
+
+
+    // // JavaScript code
+    // var citySelect = document.getElementById('citySelect');
+    // var localitySelect = document.getElementById('localitySelect');
+    // var previousCity = citySelect.value;  // Store the previous selected city
+    // var previousLocality = localitySelect.value;  // Store the previous selected locality
+
+    // citySelect.addEventListener('change', function() {
+    //     var selectedCity = this.value;
+    //     // Hide previous locality option and show new locality options matching the selected city
+    //     for (var i = 0; i < localitySelect.options.length; i++) {
+    //         var option = localitySelect.options[i];
+    //         if (option.getAttribute('data-city') === previousCity) {
+    //             option.style.display = 'none';
+    //         }
+    //         if (option.getAttribute('data-city') === selectedCity) {
+    //             option.style.display = 'block';
+    //         }
+    //     }
+    //     previousCity = selectedCity;  // Update the previous selected city
+
+    //     // Preserve the selected locality if it exists for the new city
+    //     var selectedLocalityOption = localitySelect.querySelector('option[data-city="' + selectedCity + '"]');
+    //     if (selectedLocalityOption) {
+    //         selectedLocalityOption.selected = true;
+    //         previousLocality = selectedLocalityOption.value;  // Update the previous selected locality
+    //     } else {
+    //         previousLocality = '';
+    //     }
+    // });
+
+
+</script>
+{% endblock%}

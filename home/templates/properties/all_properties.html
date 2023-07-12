@@ -1,0 +1,315 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block styles %}
+.fixed-section {
+background-color:rgb(255, 176, 92) ;
+}
+
+
+.card img {
+width: 350px;
+height: 200px; /* Set a fixed height for the card images */
+object-fit: cover; /* Maintain aspect ratio and crop as needed */
+position: center-center;
+}
+.scrollable-section {
+max-height: 100vh;
+overflow-y: auto;
+background-color: #fff;
+}
+
+.fixed-section-top {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+z-index: 999;
+background-color: #f2f2f2;
+padding: 10px;
+}
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 py-5 fixed-section bg-white border border-start-0 border-top-0 d-none d-md-block">
+            <div class="container bg-white">
+                <form action="{% url 'apply_filters'  %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-2 mt-2">
+                        <label for="citySelect">
+                            <h5 style="font-family: Roboto;">City</h5>
+                        </label>
+                        <select class="form-control" name="city" id="citySelect">
+                            <option selected value="{{selected_city}}">{{selected_city}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-2" >
+                        <h5 style="font-family: Roboto;">Locations</h5>
+                        <div class="form-group col-md-12">
+                            <input type="text" name="location" id="location" autocomplete="off" cols="12" rows="3"
+                                class="form-control" onkeydown="return checkEnter(event)" value="{{selected_location}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Max Price</h5>
+                        <div class="form-group col-md-12">
+                            <input type="text" name="max_price" id="max_price" onkeydown="return checkEnter(event)"
+                                class="form-control" value="{{max_price}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="form-group col-md-12">
+                            <input type="hidden" name="filtered_properties" id="filtered_properties" class="form-control"  value="{{searched_properties}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Type of homes</h5>
+                        {% for category in categories %}
+                        {% if 'All' in selected_category %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}" checked>
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% else %}
+                        {% if category.cat_name in selected_category%}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}" checked>
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% else %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}">
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Amenities</h5>
+                        {% for i in amenities %}
+                        {% if i.name in selected_amenities %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="amenities" type="checkbox" id="{{i.id}}"
+                                value="{{i.name}}" checked>
+                            <label class="form-check-label" for="{{i.id}}">{{i.name}}</label>
+                        </div>
+                        {% else %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="amenities" type="checkbox" id="{{i.id}}"
+                                value="{{i.name}}" >
+                            <label class="form-check-label" for="{{i.id}}">{{i.name}}</label>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Looking homes for ...</h5>
+                        {% for choice_value, choice_label in renter_choices %}
+                            {% if choice_value in prefer_renter %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="renter_choices" type="checkbox" id="{{ choice_value }}"
+                                        value="{{ choice_value }}" checked>
+                                    <label class="form-check-label" for="{{ choice_value }}">{{ choice_label }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="renter_choices" type="checkbox" id="{{ choice_value }}"
+                                        value="{{ choice_value }}">
+                                    <label class="form-check-label" for="{{ choice_value }}">{{ choice_label }}</label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="form-group text-center mt-2 mb-2">
+                        <button type="submit" class="btn btn-view-1 col-7">Apply Filters</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <button type="button" class="btn btn-view-1 col-8 mx-auto mt-2 mb-2 d-md-none" data-bs-toggle="modal" data-bs-target="#filterModal">Show Filters</button>
+        <div class="col-md-8 scrollable-section">
+            <!-- Right Section -->
+            <h2>Search result</h2>
+            {% for prop,image, prop_amenities, wishlist_prop_exist in searched_properties %}
+            <div class="card mb-3 col-md-12">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <a href="/property_detailed_view/{{prop.property_id}}"><img src="{{image.image.url}}"
+                                class="img-fluid rounded-start" alt="..."></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a href="/property_detailed_view/{{prop.property_id}}" class="text-decoration-none">
+                                <h5 class="card-title " style="color:black;">{{prop.propertytitle}}</h5>
+                            </a>
+                            <p class="card-text">Rs.{{prop.rent}} / month</p>
+                            <p class="card-text">{{prop.description}}</p>
+                            {% for i in prop_amenities%}
+                            {% if forloop.last %}
+                            <p class="card-text">{{i}}</p>
+                            {% else %}
+                            <span class="card-text">{{i}},</span>
+                            {% endif %}
+
+                            {% endfor %}
+                            <a href="/property_detailed_view/{{prop.property_id}}" class="btn btn-view-1">view</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Button to trigger the modal -->
+
+  
+  <!-- The Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        
+        <!-- Modal content goes here -->
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel" style="font-family: Roboto;">Filters</h5>
+          <button type="button" class="close" data-bs-dismiss = "modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container bg-white">
+                <form action="{% url 'apply_filters'  %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-2 mt-2">
+                        <label for="citySelect">
+                            <h5 style="font-family: Roboto;">City</h5>
+                        </label>
+                        <select class="form-control" name="city" id="citySelect">
+                            <option selected value="{{selected_city}}">{{selected_city}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-2" >
+                        <h5 style="font-family: Roboto;">Locations</h5>
+                        <div class="form-group col-md-12">
+                            <input type="text" name="location" id="location" autocomplete="off" cols="12" rows="3"
+                                class="form-control" onkeydown="return checkEnter(event)" value="{{selected_location}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Max Price</h5>
+                        <div class="form-group col-md-12">
+                            <input type="text" name="max_price" id="max_price" onkeydown="return checkEnter(event)"
+                                class="form-control" value="{{max_price}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="form-group col-md-12">
+                            <input type="hidden" name="filtered_properties" id="filtered_properties" class="form-control"  value="{{searched_properties}}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Type of homes</h5>
+                        {% for category in categories %}
+                        {% if 'All' in selected_category %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}" checked>
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% else %}
+                        {% if category.cat_name in selected_category%}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}" checked>
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% else %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="type_of_home" type="checkbox" id="{{category.id}}"
+                                value="{{category.id}}">
+                            <label class="form-check-label" for="{{category.id}}">{{category.cat_name}}</label>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Amenities</h5>
+                        {% for i in amenities %}
+                        {% if i.name in selected_amenities %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="amenities" type="checkbox" id="{{i.id}}"
+                                value="{{i.name}}" checked>
+                            <label class="form-check-label" for="{{i.id}}">{{i.name}}</label>
+                        </div>
+                        {% else %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="amenities" type="checkbox" id="{{i.id}}"
+                                value="{{i.name}}" >
+                            <label class="form-check-label" for="{{i.id}}">{{i.name}}</label>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-2">
+                        <h5 style="font-family: Roboto;">Looking homes for ...</h5>
+                        {% for choice_value, choice_label in renter_choices %}
+                            {% if choice_value in prefer_renter %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="renter_choices" type="checkbox" id="{{ choice_value }}"
+                                        value="{{ choice_value }}" checked>
+                                    <label class="form-check-label" for="{{ choice_value }}">{{ choice_label }}</label>
+                                </div>
+                            {% else %}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="renter_choices" type="checkbox" id="{{ choice_value }}"
+                                        value="{{ choice_value }}">
+                                    <label class="form-check-label" for="{{ choice_value }}">{{ choice_label }}</label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="form-group text-center mt-2 mb-2">
+                        <button type="submit" class="btn btn-view-1 col-7">Apply Filters</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_map_api_key }}&libraries=places"></script>
+<script>
+    
+    var input = document.getElementById('location');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    function checkEnter(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+    }
+</script>
+{% endblock%}
