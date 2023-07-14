@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h(nz=dv$_=b5jvu*q-rpq$(v+z7a*7v+7tj2lrgr^(%_4f&-i*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['www.nextshelters.com']
 
@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'u481765919_Renter',
         'USER' : 'u481765919_Renter_data',
         'PASSWORD' : 'AnasKhan@1',
-        'HOST': 'localhost',
+        'HOST': 'www.nestshelters.com',
         'PORT': 3306
     }
 }
