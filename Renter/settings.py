@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h(nz=dv$_=b5jvu*q-rpq$(v+z7a*7v+7tj2lrgr^(%_4f&-i*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.nextshelters.com']
 
 
 # Application definition
@@ -79,11 +79,12 @@ ASGI_APPLICATION = 'Renter.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Renter',
-        'USER' : 'postgres',
-        'PASSWORD' : '12345',
-        'HOST': 'localhost'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'u481765919_Renter',
+        'USER' : 'u481765919_Renter_data',
+        'PASSWORD' : 'AnasKhan@1',
+        'HOST': 'localhost',
+        'PORT': 3306
     }
 }
 
@@ -122,7 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -131,12 +132,7 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'khanmohammadanas27@gmail.com'
-EMAIL_HOST_PASSWORD = '8171706539'
-EMAIL_USE_TLS = True 
+
 
 TWILIO_ACCOUNT_SID = 'ACc3b3ddfce9f993fbf5e0a95a037f69f9'
 TWILIO_AUTH_TOKEN = 'd7bb6858aeb8bbefa5aa6665c06e6438'
@@ -147,7 +143,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],
+            "hosts": [("www.nextshelters.com", 6379)],
         },
     },
 }

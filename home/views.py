@@ -409,6 +409,8 @@ def upload_images(request,uid):
 def single_property_view(request,uid):
     prop_obj = Properties.objects.filter(property_id = uid)
     user1 = request.user.username
+    renter_choices = Properties.prefer_renter.field.choices
+    furnishing_choices = Properties.furnishing.field.choices
     
     property = []
     for prop in prop_obj:
@@ -418,7 +420,7 @@ def single_property_view(request,uid):
         wishlist_prop_exist = Wishlist.objects.filter(wishlist_property = prop).exists()
 
         property.append([prop,images,amenities,wishlist_prop_exist,user1,user2])
-    param = {'property':property}
+    param = {'property':property,'renter_choices':renter_choices, 'furnishing_choices':furnishing_choices}
     return render(request,'properties/single_property_view.html', param)
 
 

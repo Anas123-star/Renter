@@ -42,12 +42,43 @@ color:red;
               </div>
               <div class="col-md-6">
                 <div class="card-body">
-                  <h5 class="card-title">{{prop.propertytitle}}</h5>
+                  <div class="d-flex justify-content-between">
+                  <h5 style="font-family: Roboto;"> {{prop.propertytitle}}</h5>
+                  <h5 style="font-family: Roboto;">Rs. {{prop.rent}} /month</h5>
+                </div>
+                <hr>
+                <p><strong><i class="fa fa-edit" aria-hidden="true"></i> Description:</strong><span> {{prop.description}}</span></p>
+                <p><strong><i class="fa fa-address-card" aria-hidden="true"></i> Address:</strong><span> {{prop.address}}</span></p>
+                <hr>
+                <div class="d-flex justify-content-between">
+               
+                <li style="margin: 0;">{{prop.category}}</li>
+                {% for i,j in renter_choices%}
+                {% if i in prop.prefer_renter%}
+                <li>{{j}}</li>
+                {% endif %}
+                {% endfor %}
+                {% for i,j in furnishing_choices%}
+                {% if i in prop.furnishing%}
+                <li>{{j}}</li>
+                {% endif %}
+                {% endfor %}
+               
+              </div>
+              <hr>
+                <p style="margin-bottom: 0;"><strong> Amenities:</strong>
+                <ol>
+                {% for i in prop.amenities.all%}
+                <li>{{i}}</li>
+                {% endfor %}
+              </ol>
+              </p>
+                  <!-- <h5 class="card-title" style="font-family: Roboto;">{{prop.propertytitle}}</h5>
                   <h5 class="card-title">Rs.{{prop.rent}}/month</h5>
                   <p class="card-text">{{prop.description}}</p>
                   <p class="card-text">{{prop.address}}</p>
                   <p class="card-text">{{prop.prefer_renter}}</p>
-                  <p class="card-text">{{prop.category}}</p>
+                  <p class="card-text">c</p> -->
                   <div class="row g-2">
                     <a href="{% url 'show_property_photos' prop.property_id %}" class="btn btn-view-1">Show Photos</a>
                     {% if wishlist_prop_exist %}
