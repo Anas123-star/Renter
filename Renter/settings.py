@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h(nz=dv$_=b5jvu*q-rpq$(v+z7a*7v+7tj2lrgr^(%_4f&-i*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.nextshelters.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,12 +79,11 @@ ASGI_APPLICATION = 'Renter.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u481765919_Renter',
-        'USER' : 'u481765919_Renter_data',
-        'PASSWORD' : 'AnasKhan@1',
-        'HOST': 'www.nestshelters.com',
-        'PORT': 3306
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Renter',
+        'USER' : 'postgres',
+        'PASSWORD' : '12345',
+        'HOST': 'localhost'
     }
 }
 
@@ -143,7 +142,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("www.nextshelters.com", 6379)],
+            "hosts": [("localhost", 6379)],
         },
     },
 }
