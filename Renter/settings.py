@@ -80,10 +80,11 @@ ASGI_APPLICATION = 'Renter.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Renter',
-        'USER' : 'Renter',
-        'PASSWORD' : 'AnasKhan@1',
-        'HOST': 'localhost'
+        'NAME': 'renter',
+        'USER': 'postgres',
+        'PASSWORD': 'AnasKhan@1',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
