@@ -12,18 +12,18 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import environ
 import os.path
 from pathlib import Path
-env = environ.Env()
-environ.Env.read_env()
-SECRET_KEY = env("SECRET_KEY") 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+environ.Env.read_env()
+SECRET_KEY = env("SECRET_KEY") 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h(nz=dv$_=b5jvu*q-rpq$(v+z7a*7v+7tj2lrgr^(%_4f&-i*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -137,9 +137,9 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-TWILIO_ACCOUNT_SID = 'ACc3b3ddfce9f993fbf5e0a95a037f69f9'
-TWILIO_AUTH_TOKEN = 'd7bb6858aeb8bbefa5aa6665c06e6438'
-TWILIO_PHONE_NUMBER = '+13158596404'
+TWILIO_ACCOUNT_SID = env("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = env("TWILIO_PHONE_NUMBER")
 
 
 CHANNEL_LAYERS = {
@@ -151,7 +151,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyAku7eNLvcltlKm_43fK9XIEPp4Gg4WXpo'
+GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
 
 import mimetypes
 

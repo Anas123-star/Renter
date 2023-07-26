@@ -81,17 +81,6 @@ def get_coordinates(address, api_key):
 
 
 
-# Example usage
-address = "Aligarh - Kakula Road, Upper Fort, Atishbazan, Mahaveer Ganj, Aligarh, Uttar Pradesh, India"
-api_key = settings.GOOGLE_MAPS_API_KEY
-# Latitude: 27.9242913, Longitude: 78.0862303
-dist = calculate_distance(27.9242913,78.0862303,27.8816223,78.0651858)
-print(dist)
-latitude, longitude = get_coordinates(address, api_key)
-addresssss = get_address(latitude,longitude,api_key)
-print(addresssss)
-print(f"Latitude: {latitude}, Longitude: {longitude}")
-
 
 
 
