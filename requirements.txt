@@ -62,7 +62,6 @@ pymongo==4.3.3
 pyOpenSSL==23.2.0
 python-dateutil==2.8.2
 pytz==2023.3
-pywin32==306
 pyzmq==25.0.0
 redis==4.5.5
 requests==2.31.0
