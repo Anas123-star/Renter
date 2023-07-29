@@ -9,16 +9,15 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import environ
+# import environ
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
-
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY") 
-print(SECRET_KEY)
+SECRET_KEY = '8jcrv4s597=)^d!@cdj$-ob0^08w9%v#6dk02pb=b=^rvc#*ik'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -82,11 +81,11 @@ ASGI_APPLICATION = 'Renter.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DATABASE_NAME"),
-        'USER': os.environ.get("DATABASE_USER"),
-        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
-        'HOST': os.environ.get("DATABASE_HOST"),
-        'PORT': os.environ.get("DATABASE_PORT"),
+        'NAME': 'renter',
+        'USER': 'renter_user',
+        'PASSWORD': 'renterpassword',
+        'HOST': 'renter.cxh43lqjw7ac.ap-south-1.rds.amazonaws.com',
+        'PORT': 5432,
     }
 }
 
@@ -137,9 +136,9 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER")
+TWILIO_ACCOUNT_SID = 'ACc3b3ddfce9f993fbf5e0a95a037f69f9'
+TWILIO_AUTH_TOKEN = 'd7bb6858aeb8bbefa5aa6665c06e6438'
+TWILIO_PHONE_NUMBER = '+13158596404'
 
 
 CHANNEL_LAYERS = {
@@ -151,7 +150,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
+GOOGLE_MAPS_API_KEY = 'AIzaSyAku7eNLvcltlKm_43fK9XIEPp4Gg4WXpo'
 
 import mimetypes
 
