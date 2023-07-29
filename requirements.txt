@@ -63,7 +63,6 @@ pyOpenSSL==23.2.0
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 pytz==2023.3
-pywin32==306
 pyzmq==25.0.0
 redis==4.5.5
 requests==2.31.0
@@ -75,7 +74,6 @@ tornado==6.2
 traitlets==5.9.0
 twilio==8.2.1
 Twisted==22.10.0
-twisted-iocpsupport==1.0.3
 txaio==23.1.1
 typing_extensions==4.6.3
 tzdata==2023.3
