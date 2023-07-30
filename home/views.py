@@ -585,6 +585,7 @@ def index(request):
     profile = None
     plan = None
     unread_mssg = 0
+    print(user)
     if not isinstance(user, AnonymousUser):
         print("hello")
         profile = Profile.objects.get(user=user)

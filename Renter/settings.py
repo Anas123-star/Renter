@@ -155,3 +155,14 @@ GOOGLE_MAPS_API_KEY = 'AIzaSyAku7eNLvcltlKm_43fK9XIEPp4Gg4WXpo'
 import mimetypes
 
 mimetypes.add_type("text/javascript", ".js", True)
+
+
+AWS_ACCESS_KEY_ID = 'AKIA4HXZF2KDUBEOEPWI '
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'nextsheltersbucket'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'ap-south-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
