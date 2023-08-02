@@ -32,7 +32,7 @@ class WishlistAdmin(admin.ModelAdmin):
 admin.site.register(Wishlist, WishlistAdmin )
 
 class PropertyImagesAdmin(admin.ModelAdmin):
-    list_display = ('name','property_title','image_tag')
+    list_display = ('name','property_title')
 admin.site.register(PropertyImages, PropertyImagesAdmin )
 
 

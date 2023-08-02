@@ -279,7 +279,7 @@ def list_property(request):
 
         renter_choices = Properties.prefer_renter.field.choices
         furnishing_choices = Properties.furnishing.field.choices
-        with open('home\static\state_district.json') as json_file:
+        with open('static/state_district.json') as json_file:
                 data = json.load(json_file)
                 states = data['states']
         district_list = []
@@ -450,7 +450,7 @@ def edit_property(request,uid):
     # no_of_prop = Properties.objects.filter(profile=profile_obj).count()
     renter_choices = Properties.prefer_renter.field.choices
     furnishing_choices = Properties.furnishing.field.choices
-    with open('home/static/home/state_district.json') as json_file:
+    with open('static/state_district.json') as json_file:
         data = json.load(json_file)
         states = data['states']
     district_list = []

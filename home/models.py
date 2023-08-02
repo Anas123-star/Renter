@@ -101,9 +101,6 @@ class PropertyImages(models.Model):
 
     def __str__(self):
         return self.property.profile.user.username
-    
-    def image_tag(self):
-	    return mark_safe('<img src="%s" width="80" />' % (self.image.url))
 
     def property_title(self):
         return self.property.propertytitle
