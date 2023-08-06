@@ -218,7 +218,7 @@ position: sticky;
   // console.log(month)
 
 
-  let url = 'ws://127.0.0.1:8000/dashboard/tenant_details/{{tenant_details.uid}}'
+  let url = 'ws://127.0.0.1:8001/dashboard/tenant_details/{{tenant_details.uid}}'
   let ten_socket = new WebSocket(url)
 
   ten_socket.onopen = function (e) {

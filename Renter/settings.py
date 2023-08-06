@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'storages',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -73,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'Renter.wsgi.application'
+WSGI_APPLICATION = 'Renter.wsgi.application'
 ASGI_APPLICATION = 'Renter.asgi.application'
 
 

@@ -381,15 +381,15 @@ def upload_images(request,uid):
     if request.method == "POST":
         property_obj = Properties.objects.get(property_id = uid)
         images = request.FILES.getlist('multiple_images')
-        folder_path = os.path.join(settings.MEDIA_ROOT, 'property',str(request.user.username),str(uid))
-        os.makedirs(folder_path, exist_ok=True)
+        # folder_path = os.path.join(settings.MEDIA_ROOT, 'property',str(request.user.username),str(uid))
+        # os.makedirs(folder_path, exist_ok=True)
         for image in images:
-            file_path = os.path.join(folder_path, image.name)
-            # Save the image to the folder
-            with open(file_path, 'wb') as file:
-                for chunk in image.chunks():
-                    file.write(chunk)
-            PropertyImages.objects.create(property = property_obj,image=os.path.join( 'property',str(request.user.username), str(uid), image.name))
+            # file_path = os.path.join(folder_path, image.name)
+            # # Save the image to the folder
+            # with open(file_path, 'wb') as file:
+            #     for chunk in image.chunks():
+            #         file.write(chunk)
+            PropertyImages.objects.create(property = property_obj,image=image)
         return redirect('listed_properties')
     return render(request,'properties/add_images.html')
 
@@ -911,20 +911,20 @@ def add_tenants(request,uid):
         document = request.FILES.get("doc")
         photo = request.FILES.get("photo")
         prop_obj = Properties.objects.get(property_id = uid)
-        folder_path = os.path.join(settings.MEDIA_ROOT, 'documents',str(phone_number))
-        os.makedirs(folder_path, exist_ok=True)
-        document_path = os.path.join(folder_path, document.name)
-        photo_path = os.path.join(folder_path, photo.name)
-        with open(photo_path, 'wb') as file:
-            for chunk in photo.chunks():
-                file.write(chunk)
+        # folder_path = os.path.join(settings.MEDIA_ROOT, 'documents',str(phone_number))
+        # os.makedirs(folder_path, exist_ok=True)
+        # document_path = os.path.join(folder_path, document.name)
+        # photo_path = os.path.join(folder_path, photo.name)
+        # with open(photo_path, 'wb') as file:
+        #     for chunk in photo.chunks():
+        #         file.write(chunk)
         # Save the image to the folder
-        with open(document_path, 'wb') as file:
-            for chunk in document.chunks():
-                file.write(chunk)
+        # with open(document_path, 'wb') as file:
+        #     for chunk in document.chunks():
+        #         file.write(chunk)
 
         tenant_details = Tenant.objects.create(property=prop_obj,phone = phone_number ,start_date = start_date,advance= advance, adhaar_no=adhaar_no, email=email
-                              , rent = rent,address= address,name = name,document=os.path.join( 'documents',str(phone_number), document.name), photo = os.path.join( 'documents',str(phone_number), photo.name) )
+                              , rent = rent,address= address,name = name,document=document, photo = photo )
         print(tenant_details)
         adv_month = int(tenant_details.advance)//int(tenant_details.rent)
         print(adv_month)
