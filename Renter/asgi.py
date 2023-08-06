@@ -14,6 +14,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import path
 from home.consumers import ChatConsumer, NotificationsConsumer, TenantsConsumer
 from channels.auth import AuthMiddlewareStack
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Renter.settings')
 
 application = get_asgi_application()
