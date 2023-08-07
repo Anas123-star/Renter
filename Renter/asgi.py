@@ -18,7 +18,6 @@ from channels.auth import AuthMiddlewareStack
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Renter.settings')
 django.setup()
 application = get_asgi_application()
-
 # ws_patterns = [
 #     path('chat/<room_code>', ChatConsumer.as_asgi()),
 #     path('view_message', NotificationsConsumer.as_asgi())
