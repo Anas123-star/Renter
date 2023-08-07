@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
     'daphne',
+    'channels',
     'whitenoise.runserver_nostatic',
     'home.apps.HomeConfig',
     'django.contrib.admin',
