@@ -13,7 +13,7 @@ from django.conf import settings
 settings.configure()
 import os
 import django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Renter.settings")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Renter.settings')
 django.setup()
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
