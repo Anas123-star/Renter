@@ -26,7 +26,7 @@ SECRET_KEY = '8jcrv4s597=)^d!@cdj$-ob0^08w9%v#6dk02pb=b=^rvc#*ik'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.233.253.12' 'nextshelters.com' 'www.nextshelters.com']
+ALLOWED_HOSTS = ['13.233.253.12', 'nextshelters.com', 'www.nextshelters.com']
 
 
 # Application definition
