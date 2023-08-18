@@ -93,11 +93,17 @@ color:red;
                     {% endif %}
 
                     {% if user1 != user2 %}
-                    <a href="/create_chat_room/{{prop.property_id}}" class="btn btn-warning"
-                      style="font-family: Roboto; color: #ffffff;"><i class="fas fa-comment"></i> Chat</a>
-                      <a  href="https://wa.me/91{{prop.profile.mobile | slice:'4:'}}" class="btn btn-success" style="font-family: Roboto;">
-                        <i class="fa-brands fa-whatsapp"></i>Chat on whatsapp
+                    <!-- <a href="/create_chat_room/{{prop.property_id}}" class="btn btn-warning"
+                      style="font-family: Roboto; color: #ffffff;"><i class="fas fa-comment"></i> Chat</a> -->
+                      {% if request.user.is_anonymous%}
+                      <a  href="https://wa.me/91{{prop.profile.mobile | slice:'4:'}}" class="btn btn-success disabled" style="font-family: Roboto;">
+                        <i class="fas fa-comment"></i>Chat on whatsapp
                       </a>
+                      {%else%}
+                      <a  href="https://wa.me/91{{prop.profile.mobile | slice:'4:'}}" class="btn btn-success" style="font-family: Roboto;">
+                        <i class="fas fa-comment"></i>Chat on whatsapp
+                      </a>
+                      {% endif %}
                     {% if request.user.is_anonymous%}
                     <a href="tel:{{prop.profile.mobile}}" class="btn btn-success disabled"
                       style="font-family: Roboto;"><i class="fas fa-phone"></i> Call</a>

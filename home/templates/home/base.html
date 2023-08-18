@@ -99,7 +99,7 @@
             <li><a class="dropdown-item" href="{% url 'register' %}"  style="font-family: Baloo 2;">Register</a></li>
             <li><a class="dropdown-item" href="{% url 'login' %}"  style="font-family: Baloo 2;">Login</a></li>
             {% else %}
-            <li class="text-center"><span class="badge text-bg-warning fs-5 col-10"  style="font-family: Baloo 2;">{{user.first_name}}</span></li>
+            <li class="text-center"><span class="badge text-bg-warning fs-5 col-10"  style="font-family: Baloo 2;">{{user.username}}</span></li>
             <li><a class="dropdown-item" href="{% url 'view_messages' %}"  style="font-family: Baloo 2;">messages {% if unread_mssg > 0 %}<span class="badge text-bg-warning">{{unread_mssg}}</span>{% endif %}</a></li>
             <li><a class="dropdown-item" href="{% url 'wishlist' %}"  style="font-family: Baloo 2;">wishlist</a></li>
             <li><a class="dropdown-item" href="{% url 'listed_properties' %}"  style="font-family: Baloo 2;">Listed Properties</a></li>
@@ -149,8 +149,7 @@
       <div class="row">
         <div class="col-md-6">
           <h5 style="font-family: Roboto ;">About Us</h5>
-          <p style="font-family: Baloo 2;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac varius mauris. Pellentesque habitant
-            morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+          <p style="font-family: Baloo 2;">Welcome to NextShelters, your premier destination for hassle-free property rentals. We are a dedicated team passionate about connecting property owners and renters in a seamless and efficient manner. </p>
           <p><a href="{% url 'pagedetail' 1 %}" class="btn btn-outline text-white">Read More</a></p>
         </div>
         <div class="col-md-3">
@@ -165,18 +164,17 @@
         <div class="col-md-3">
           <h5 style = 'font-family: Roboto' ;>Contact Us</h5>
           <ul class="list-unstyled">
-            <li><i class="fas fa-map-marker-alt"></i> 123 Street, City, Country</li>
-            <li><i class="fas fa-phone"></i> +1 234 567 890</li>
-            <li><i class="fas fa-envelope"></i> <a href="mailto:khanmohammadanas27@gmail.com">info@example.com</a></li>
+            <li><i class="fas fa-phone"></i> +91-9520497755</li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:nextshelters@gmail.com" style="color: #ffffff; text-decoration: none;">nextshelters@gmail.com</a></li>
           </ul>
         </div>
       </div>
       <hr class="mt-4">
       <div class="d-flex flex-wrap justify-content-between align-items-center ">
         <div class="col-md-4 d-flex align-items-center">
-          <span class="mb-3 mb-md-0" style="color: white;">© 2023 Company, Inc</span>
+          <span class="mb-3 mb-md-0" style="color: white;">© 2023 NextShelters, Inc</span>
         </div>
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <!-- <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
           <li class="ms-3"><a class="text-body-secondary" href="#"><img
                 src="https://www.pngitem.com/pimgs/m/33-336705_facebook-icon-facebook-logo-icon-dark-grey-hd.png"
                 alt="mdo" width="40" height="32"></a></li>
@@ -187,7 +185,7 @@
                 src="https://www.pngitem.com/pimgs/m/33-336705_facebook-icon-facebook-logo-icon-dark-grey-hd.png"
                 alt="mdo" width="40" height="32"></a></li>
 
-        </ul>
+        </ul> -->
       </div>
     </div>
   </footer>

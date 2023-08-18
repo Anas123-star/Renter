@@ -87,14 +87,12 @@ def get_coordinates(address, api_key):
 
 
 def validate_password(password):
-    if len(password) < 8:
-        return False
-    if not re.search(r'\d', password):
-        return False
-    if not re.search(r'[A-Z]', password):
-        return False
-    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-        return False
+    # if len(password) < 8:
+    #     return False
+    # if not re.search(r'\d', password):
+    #     return False
+    # if not re.search(r'[A-Z]', password):
+    #     return False
     return True
 
 
@@ -164,7 +162,7 @@ def forgot_password(request):
 def register(request):
     if request.method == 'POST':
          email = request.POST.get('email')
-         name = request.POST.get('name')
+        #  name = request.POST.get('name')
          username = request.POST.get('username')
          pass1 = request.POST.get('password1')
          pass2 = request.POST.get('password2')
@@ -198,7 +196,7 @@ def register(request):
             context = {'message': "Both password does not match", 'class':'danger'}
             return render(request, 'registration/register.html', context)
          else:
-            user = User(email = email,  first_name = name, username= username)
+            user = User(email = email, username= username)
             is_validate_pass = validate_password(pass1)
             if is_validate_pass: 
                 user.set_password(pass1)
