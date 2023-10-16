@@ -42,7 +42,7 @@
         <div class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
           {% for all_prop,prop_image in all_properties %}
           <div
-            class="card mx-2 mb-2 mr-2 {% if forloop.counter|divisibleby:3 %} d-none d-sm-block {% endif %} {% if forloop.counter|divisibleby:4 %} d-none d-lg-block {% endif %}"
+            class="card mx-2 mb-2 mr-2 "
             style="width: 18rem;">
             <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
             <div class="card-body">
@@ -51,6 +51,9 @@
               <h4 class="card-title">{{all_prop.rent}}</h4>
               <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
             </div>
+          </div>
+          <div class="d-sm">
+              hello
           </div>
           {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
         </div>

@@ -656,14 +656,29 @@ def search_properties(request):
             selected_category = ["All"]
         else:
             selected_category = [Categories.objects.get(id=type_of_home).cat_name]
+        
         if type_of_home == str(0):
-            searched_properties = Properties.objects.filter(district = city, prefer_renter = prefer_renter)
-            result = json.loads(serialize('json', searched_properties))
-            request.session['result'] = result
+            if prefer_renter == 'ANY':
+                searched_properties = Properties.objects.filter(district = city)
+                result = json.loads(serialize('json', searched_properties))
+                request.session['result'] = result
+            else:
+                searched_properties = Properties.objects.filter(district = city, prefer_renter = prefer_renter)
+                result = json.loads(serialize('json', searched_properties))
+                request.session['result'] = result
+
         else:
-            searched_properties = Properties.objects.filter(category = type_of_home, district = city, prefer_renter = prefer_renter) 
-            result = json.loads(serialize('json', searched_properties))
-            request.session['result'] = result
+            if prefer_renter == 'ANY':
+                searched_properties = Properties.objects.filter(district = city, category = type_of_home)
+                result = json.loads(serialize('json', searched_properties))
+                request.session['result'] = result
+
+            else:
+                searched_properties = Properties.objects.filter(category = type_of_home, district = city, prefer_renter = prefer_renter) 
+                result = json.loads(serialize('json', searched_properties))
+                request.session['result'] = result
+        
+        print(prefer_renter)
         property = []
         request.session['city_result'] = city
         request.session['selected_category_result'] = selected_category
@@ -673,7 +688,7 @@ def search_properties(request):
             prop_amenities = prop.amenities.all()
             wishlist_prop_exist = Wishlist.objects.filter(wishlist_property = prop).exists()
             property.append([prop,image,prop_amenities,wishlist_prop_exist])
-    
+        print(city)
     return render(request, 'properties/all_properties.html',{'searched_properties':property , 'google_map_api_key': settings.GOOGLE_MAPS_API_KEY , 
                                                              'amenities': amenities , 'renter_choices':renter_choices, 'categories':categories, 
                                                              'selected_city':city,'prefer_renter':prefer_renter_list, 'selected_category': selected_category, 
