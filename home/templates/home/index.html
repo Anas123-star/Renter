@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div class="container pb-5 pt-2 mb-5 mt-5" style="background-color: #005985ad;">
+<div id="explore_prop" class="container pb-5 pt-2 mb-5 mt-5" style="background-color: #005985ad;">
   <div class="container d-flex justify-content-between">
     <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
   </div>
@@ -39,7 +39,7 @@
   <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <div class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+        <div id =  "" class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
           {% for all_prop,prop_image in all_properties %}
           <div
             class="card mx-2 mb-2 mr-2 "
@@ -61,7 +61,6 @@
           {% endfor %}
 
         </div>
-
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -76,7 +75,7 @@
 </div>
 
 
-<div class="container">
+<div id="cat_prop" class="container">
 
 
   <nav>
@@ -90,7 +89,7 @@
   </nav>
 
 
-  <div class="tab-content" id="nav-tabContent">
+  <div  class="tab-content" id="nav-tabContent">
     {% for cat_prop, cat_id, cat in cat_properties %}
     <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
       aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
@@ -105,7 +104,7 @@
               <div class="container d-flex col-lg-10 col-md-10 ">
                 {% for i,j in cat_prop %}
                 <div
-                  class="card mx-2 mb-2 mr-2 {% if forloop.counter|divisibleby:3 %} d-none d-sm-block {% endif %} {% if forloop.counter|divisibleby:4 %} d-none d-lg-block {% endif %}"
+                  class="card mx-2 mb-2 mr-2 "
                   style="width: 18rem;">
                   <img src="{{j.image.url}}" class="card-img-top" alt="...">
                   <div class="card-body">
@@ -121,7 +120,6 @@
             <div class="carousel-item">
               <div class="container d-flex col-lg-10 col-md-10">
                 {% endif %}
-
                 {% endfor %}
 
               </div>
@@ -198,10 +196,12 @@
     </div>
   </div>
 </div>
+<div id="content">This is the default content.</div>
+
 
 {% endblock %}
 
-{% block scripts%}
+{% block scripts %}
 <script>
   let e = document.getElementById("search")
   let modal = document.getElementById('searchModal');
@@ -209,6 +209,430 @@
     var modalInstance = new bootstrap.Modal(modal);
     modalInstance.show();
   })
+
+  function updateContent() {
+  const contentElementExplore_prop = document.getElementById("explore_prop");
+  const contentElementCat_prop = document.getElementById("cat_prop")
+  console.log(contentElementCat_prop)
+  if (window.innerWidth >= 1024) { // Check if screen width is less than or equal to 768 pixels
+
+    contentElementExplore_prop.innerHTML = `<div class="container d-flex justify-content-between">
+    <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
+  </div>
+  <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div id =  "" class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+          {% for all_prop,prop_image in all_properties %}
+          <div
+            class="card mx-2 mb-2 mr-2 "
+            style="width: 18rem;">
+            <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{all_prop.property_title}}</h5>
+              <p class="card-text">{{all_prop.description}}</p>
+              <h4 class="card-title">{{all_prop.rent}}</h4>
+              <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="container d-flex bg-body-secondary mb-2 mt-2">
+          {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>`;
+    contentElementCat_prop,innerHTML = ` <nav>
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+      {% for category in categories %}
+      <button class="nav-link {% if forloop.counter == 1%}active {% endif%}text-small mx-1" id="nav-{{category.id}}-tab"
+        data-bs-toggle="tab" data-bs-target="#nav-{{category.id}}" type="button" role="tab"
+        aria-controls="nav-{{category.id}}" aria-selected="true" style="font-family: cursive;" >{{category.cat_name}} </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+
+  <div  class="tab-content" id="nav-tabContent">
+    {% for cat_prop, cat_id, cat in cat_properties %}
+    <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
+      aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
+      <div class="container pb-5 pt-2 mb-5" style="background-color: #2c6a89ad;">
+        <div class="container d-flex justify-content-between">
+          <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">{{cat}}</h2>
+        </div>
+
+        <div id="{{cat_id}} Controls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container d-flex col-lg-10 col-md-10 ">
+                {% for i,j in cat_prop %}
+                <div
+                  class="card mx-2 mb-2 mr-2 "
+                  style="width: 18rem;">
+                  <img src="{{j.image.url}}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.propertytitle}}</h5>
+                    <h4 class="card-title">{{i.rent}}</h4>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="/property_detailed_view/{{i.property_id}}" class="btn btn-view-1 col-12">view</a>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container d-flex col-lg-10 col-md-10">
+                {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+`  
+} 
+  else if(window.innerWidth < 1024 && window.innerWidth >= 575) {
+    contentElementExplore_prop.innerHTML = `<div class="container d-flex justify-content-between">
+    <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
+  </div>
+  <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div id =  "" class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+          {% for all_prop,prop_image in all_properties %}
+          <div
+            class="card mx-2 mb-2 mr-2 "
+            style="width: 18rem;">
+            <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{all_prop.property_title}}</h5>
+              <p class="card-text">{{all_prop.description}}</p>
+              <h4 class="card-title">{{all_prop.rent}}</h4>
+              <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="container d-flex bg-body-secondary mb-2 mt-2">
+          {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>`;
+  contentElementCat_prop.innerHTML = ` <nav>
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+      {% for category in categories %}
+      <button class="nav-link {% if forloop.counter == 1%}active {% endif%}text-small mx-1" id="nav-{{category.id}}-tab"
+        data-bs-toggle="tab" data-bs-target="#nav-{{category.id}}" type="button" role="tab"
+        aria-controls="nav-{{category.id}}" aria-selected="true" style="font-family: cursive;" >{{category.cat_name}} </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+
+  <div  class="tab-content" id="nav-tabContent">
+    {% for cat_prop, cat_id, cat in cat_properties %}
+    <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
+      aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
+      <div class="container pb-5 pt-2 mb-5" style="background-color: #2c6a89ad;">
+        <div class="container d-flex justify-content-between">
+          <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">{{cat}}</h2>
+        </div>
+
+        <div id="{{cat_id}} Controls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container d-flex col-lg-10 col-md-10 ">
+                {% for i,j in cat_prop %}
+                <div
+                  class="card mx-2 mb-2 mr-2 "
+                  style="width: 18rem;">
+                  <img src="{{j.image.url}}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.propertytitle}}</h5>
+                    <h4 class="card-title">{{i.rent}}</h4>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="/property_detailed_view/{{i.property_id}}" class="btn btn-view-1 col-12">view</a>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 and forloop.counter > 0 and not forloop.last %}
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container d-flex col-lg-10 col-md-10">
+                {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+`
+}
+  else if(window.innerWidth < 575 && window.innerWidth >= 450){
+    contentElementExplore_prop.innerHTML  = `<div class="container d-flex justify-content-between">
+    <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
+  </div>
+  <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div id =  "" class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+          {% for all_prop,prop_image in all_properties %}
+          <div
+            class="card mx-2 mb-2 mr-2 "
+            style="width: 18rem;">
+            <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{all_prop.property_title}}</h5>
+              <p class="card-text">{{all_prop.description}}</p>
+              <h4 class="card-title">{{all_prop.rent}}</h4>
+              <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:2 and forloop.counter > 0 and not forloop.last %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="container d-flex bg-body-secondary mb-2 mt-2">
+          {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>`
+  contentElementCat_prop.innerHTML = ` <nav>
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+      {% for category in categories %}
+      <button class="nav-link {% if forloop.counter == 1%}active {% endif%}text-small mx-1" id="nav-{{category.id}}-tab"
+        data-bs-toggle="tab" data-bs-target="#nav-{{category.id}}" type="button" role="tab"
+        aria-controls="nav-{{category.id}}" aria-selected="true" style="font-family: cursive;" >{{category.cat_name}} </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+
+  <div  class="tab-content" id="nav-tabContent">
+    {% for cat_prop, cat_id, cat in cat_properties %}
+    <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
+      aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
+      <div class="container pb-5 pt-2 mb-5" style="background-color: #2c6a89ad;">
+        <div class="container d-flex justify-content-between">
+          <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">{{cat}}</h2>
+        </div>
+
+        <div id="{{cat_id}} Controls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container d-flex col-lg-10 col-md-10 ">
+                {% for i,j in cat_prop %}
+                <div
+                  class="card mx-2 mb-2 mr-2 "
+                  style="width: 18rem;">
+                  <img src="{{j.image.url}}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.propertytitle}}</h5>
+                    <h4 class="card-title">{{i.rent}}</h4>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="/property_detailed_view/{{i.property_id}}" class="btn btn-view-1 col-12">view</a>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:2 and forloop.counter > 0 and not forloop.last %}
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container d-flex col-lg-10 col-md-10">
+                {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+`
+}
+  else{
+    contentElementExplore_prop.innerHTML = `<div class="container d-flex justify-content-between">
+    <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">Explore Properties</h2>
+  </div>
+  <div id="ExploreHomeControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div id =  "" class="container d-flex  mb-2 mt-2" style="background-color: #3ca1d400;">
+          {% for all_prop,prop_image in all_properties %}
+          <div
+            class="card mx-2 mb-2 mr-2 "
+            style="width: 18rem;">
+            <img src="{{prop_image.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{all_prop.property_title}}</h5>
+              <p class="card-text">{{all_prop.description}}</p>
+              <h4 class="card-title">{{all_prop.rent}}</h4>
+              <a href="/property_detailed_view/{{all_prop.property_id}}" class="btn btn-view-1 col-12">view</a>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:1 and forloop.counter > 0 and not forloop.last %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="container d-flex bg-body-secondary mb-2 mt-2">
+          {% endif %}
+          {% endfor %}
+
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#ExploreHomeControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>`;
+  contentElementCat_prop.innerHTML = ` <nav>
+    <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+      {% for category in categories %}
+      <button class="nav-link {% if forloop.counter == 1%}active {% endif%}text-small mx-1" id="nav-{{category.id}}-tab"
+        data-bs-toggle="tab" data-bs-target="#nav-{{category.id}}" type="button" role="tab"
+        aria-controls="nav-{{category.id}}" aria-selected="true" style="font-family: cursive;" >{{category.cat_name}} </button>
+      {% endfor %}
+    </div>
+  </nav>
+
+
+  <div  class="tab-content" id="nav-tabContent">
+    {% for cat_prop, cat_id, cat in cat_properties %}
+    <div class="tab-pane fade {% if forloop.counter == 1 %}active{% endif %} show" id="nav-{{cat_id}}" role="tabpanel"
+      aria-labelledby="nav-{{cat_id}}-tab" style="background-color: #2c6a89ad; color: aliceblue;">
+      <div class="container pb-5 pt-2 mb-5" style="background-color: #2c6a89ad;">
+        <div class="container d-flex justify-content-between">
+          <h2 class="mt-2 mb-2 text-white" style="font-family: cursive;">{{cat}}</h2>
+        </div>
+
+        <div id="{{cat_id}} Controls" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container d-flex col-lg-10 col-md-10 ">
+                {% for i,j in cat_prop %}
+                <div
+                  class="card mx-2 mb-2 mr-2 "
+                  style="width: 18rem;">
+                  <img src="{{j.image.url}}" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title">{{i.propertytitle}}</h5>
+                    <h4 class="card-title">{{i.rent}}</h4>
+                    <p class="card-text">{{i.description}}</p>
+                    <a href="/property_detailed_view/{{i.property_id}}" class="btn btn-view-1 col-12">view</a>
+                  </div>
+                </div>
+                {% if forloop.counter|divisibleby:1 and forloop.counter > 0 and not forloop.last %}
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="container d-flex col-lg-10 col-md-10">
+                {% endif %}
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#{{cat}}Controls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+`}
+}
+
+  
+// Call the function on page load and when the window is resized
+updateContent();
+window.addEventListener("resize", updateContent);
+
 
 
     // // JavaScript code
@@ -243,4 +667,4 @@
 
 
 </script>
-{% endblock%}
+{% endblock %}
